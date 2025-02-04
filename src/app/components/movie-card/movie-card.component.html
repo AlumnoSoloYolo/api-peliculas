@@ -1,0 +1,23 @@
+<div class="movie-card" [routerLink]="['/pelicula', movie.id]">
+    <div class="card-content">
+        <div class="card-img-container">
+            <img [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path" [alt]="movie.title" class="card-img-top">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-light">{{ movie.title }}</h5>
+            <div class="vote-info">
+                <span class="badge" [style.background-color]="movie.vote_average | votoColor">
+                    <i class="bi bi-star-fill"></i>
+                    {{ movie.vote_average | number:'1.1-1' }}
+                </span>
+                <small class="text-light">{{ movie.vote_count }} votos</small>
+            </div>
+            <p class="movie-overview text-light opacity-75">
+                {{ movie.overview | slice:0:100 }}...
+            </p>
+            <small class="release-date text-light opacity-75">
+                {{ movie.release_date | date:'yyyy' }}
+            </small>
+        </div>
+    </div>
+</div>

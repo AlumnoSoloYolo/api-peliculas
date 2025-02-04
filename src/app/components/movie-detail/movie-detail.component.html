@@ -1,0 +1,158 @@
+<!-- movie-detail.component.html -->
+<div class="container-fluid p-0">
+    @if (loading) {
+    <div class="d-flex justify-content-center align-items-center" style="height: 400px;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+    </div>
+    } @else if (pelicula) {
+    <!-- Hero Section -->
+    <div class="hero-section  position-relative">
+        <div class="backdrop-image">
+            <img [src]="'https://image.tmdb.org/t/p/original' + pelicula.backdrop_path" [alt]="pelicula.title">
+        </div>
+        <div class="overlay"></div>
+        <div class="container hero-content">
+            <div class="row">
+                <div class="col-md-3">
+                    <img [src]="'https://image.tmdb.org/t/p/w500' + pelicula.poster_path" [alt]="pelicula.title"
+                        class="poster-image">
+                </div>
+                <div class="col-md-9">
+                    <h1 class="movie-title cyber-title">{{pelicula.title}}</h1>
+                    <div class="movie-meta">
+                        <span class="meta-item">{{pelicula.release_date | date:'yyyy'}}</span>
+                        <span class="separator">•</span>
+                        <span class="meta-item">{{pelicula.runtime}} min</span>
+                        <span class="separator">•</span>
+                        <span class="meta-item rating">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            {{pelicula.vote_average | number:'1.1-1'}}
+                        </span>
+                        <span class="meta-item votes">({{pelicula.vote_count}} votos)</span>
+                    </div>
+                    <div class="genres mt-3">
+                        @for (genero of pelicula.genres; track genero.id) {
+                        <span class="badge cyber-badge me-2">{{genero.name}}</span>
+                        }
+                    </div>
+                    <p class="overview mt-4">{{pelicula.overview}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <!-- Sección del Trailer con URL segura -->
+        @if (pelicula.videos?.results) {
+        @if (getTrailerKey(pelicula.videos.results)) {
+        <section class="container my-5">
+            <h2 class="section-title cyber-title">Trailer</h2>
+            <div class="ratio ratio-16x9">
+                <iframe [src]="getVideoUrl(getTrailerKey(pelicula.videos.results))" title="YouTube video"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </div>
+        </section>
+        }
+        }
+
+        <!-- Cast Section -->
+        @if (pelicula.credits?.cast?.length) {
+        <!-- Cast Section actualizado -->
+        <section class="mb-5">
+            <h2 class="section-title">Reparto Principal</h2>
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+                @for (actor of pelicula.credits.cast.slice(0, 6); track actor.id) {
+                <div class="col">
+                    <div class="movie-card cast-card">
+                        <div class="card-content">
+                            @if (actor.profile_path) {
+                            <img [src]="'https://image.tmdb.org/t/p/w200' + actor.profile_path" class="card-img-top"
+                                [alt]="actor.name">
+                            } @else {
+                            <div class="placeholder-image">
+                                <i class="bi bi-person-fill fs-1"></i>
+                            </div>
+                            }
+                            <div class="card-body">
+                                <h6 class="mb-1">{{actor.name}}</h6>
+                                <small class="text-muted">{{actor.character}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </section>
+
+        <!-- Reviews Section actualizado -->
+        <section class="mb-5">
+            <h2 class="section-title">Reseñas</h2>
+            <div class="row g-4">
+                @for (review of pelicula.reviews.results.slice(0, 3); track review.id) {
+                <div class="col-md-4">
+                    <div class="movie-card review-card">
+                        <div class="card-content">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-person-circle fs-4 me-3"></i>
+                                    <div>
+                                        <h6 class="mb-0">{{review.author_details.username}}</h6>
+                                        <small class="text-muted">{{review.created_at | date:'mediumDate'}}</small>
+                                    </div>
+                                </div>
+                                <p class="review-content">{{review.content}}</p>
+                                @if (review.author_details.rating) {
+                                <span class="cyber-badge">
+                                    <i class="bi bi-star-fill me-2"></i>
+                                    {{review.author_details.rating}}
+                                </span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </section>
+
+        <!-- Películas similares -->
+        <section class="mb-5">
+            <h2 class="section-title">Películas Similares</h2>
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+                @for (similar of pelicula.similar.results.slice(0, 6); track similar.id) {
+                <div class="col">
+                    <div class="movie-card similar-movie" [routerLink]="['/pelicula', similar.id]">
+                        <div class="card-content">
+                            @if (similar.poster_path) {
+                            <img [src]="'https://image.tmdb.org/t/p/w200' + similar.poster_path" class="card-img-top"
+                                [alt]="similar.title">
+                            }
+                            <div class="card-body">
+                                <h6 class="mb-3">{{similar.title}}</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">{{similar.release_date | date:'yyyy'}}</small>
+                                    <span class="badge" [style.background-color]="similar.vote_average | votoColor">
+                                        {{ similar.vote_average | number:'1.1-1' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </section>
+        }
+    </div>
+    } @else {
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            No se pudo cargar la información de la película.
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,20 @@
+.footer {
+    margin-top: auto;
+  }
+  
+  .footer a:hover {
+    color: #ffc107 !important;
+  }
+  
+  .footer h5 {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .footer ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer .bi {
+    font-size: 1.2rem;
+  }

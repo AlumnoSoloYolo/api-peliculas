@@ -1,0 +1,151 @@
+<!-- src/app/pages/search/search.component.html -->
+<div class="container-fluid py-4">
+    <div class="screen-container">
+        <div class="cyber-window p-4">
+            <!-- Formulario de búsqueda -->
+            <form [formGroup]="searchForm" (ngSubmit)="search()" class="mb-4">
+                <div class="row g-3">
+                    <!-- Búsqueda por texto -->
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="search-input-container">
+                                <input type="text" formControlName="query" class="form-control search-input"
+                                    [class.is-invalid]="hasError('query')" placeholder="Buscar películas...">
+                                <i class="bi bi-search search-icon"></i>
+                            </div>
+
+                            <div *ngIf="hasError('query')" class="invalid-feedback text-danger">
+                                {{ getErrorMessage('query') }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Filtros -->
+                    <div class="col-md-4 col-lg-2">
+                        <div class="form-group">
+                            <label class="form-label">Año</label>
+                            <input type="number" formControlName="year" class="form-control cyber-input"
+                                [class.is-invalid]="hasError('year')" placeholder="Ej. 2023">
+                            <div *ngIf="hasError('year')" class="invalid-feedback">
+                                {{ getErrorMessage('year') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Géneros</label>
+                            <select formControlName="genres" multiple class="form-control">
+                                @for (genero of generos; track genero.id) {
+                                <option [value]="genero.id">{{ genero.name }}</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label class="form-label">Ordenar por</label>
+                            <select formControlName="sortBy" class="form-select cyber-select">
+                                @for (option of sortOptions; track option.value) {
+                                <option [value]="option.value">{{ option.label }}</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Valoraciones -->
+                    <div class="col-md-6 col-lg-2">
+                        <div class="form-group">
+                            <label class="form-label">Valoración mínima</label>
+                            <input type="number" formControlName="minRating" class="form-control cyber-input"
+                                [class.is-invalid]="hasError('minRating')" min="0" max="10" step="0.5">
+                            @if (hasError('minRating')) {
+                            <div class="invalid-feedback">
+                                {{ getErrorMessage('minRating') }}
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-2">
+                        <div class="form-group">
+                            <label class="form-label">Valoración máxima</label>
+                            <input type="number" formControlName="maxRating" class="form-control cyber-input"
+                                [class.is-invalid]="hasError('maxRating')" min="0" max="10" step="0.5">
+                            @if (hasError('maxRating')) {
+                            <div class="invalid-feedback">
+                                {{ getErrorMessage('maxRating') }}
+                            </div>
+                            }
+                        </div>
+                    </div>
+
+
+                    <!-- Error de rango -->
+                    <div *ngIf="searchForm.errors?.['ratingRange'] && (searchForm.get('minRating')?.touched || searchForm.get('maxRating')?.touched)"
+                        class="col-12">
+                        <div class="alert alert-danger">
+                            La valoración mínima no puede ser mayor que la máxima
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="col-12 d-flex gap-2">
+                        <button type="submit" class="btn cyber-btn">
+                            <i class="bi bi-search me-2"></i>Buscar
+                        </button>
+                        <button type="button" class="btn cyber-btn-secondary" (click)="clearFilters()">
+                            <i class="bi bi-x-circle me-2"></i>Limpiar filtros
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Resultados -->
+            @if (loading) {
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+            </div>
+            } @else {
+            @if (peliculas.length > 0) {
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4">
+                @for (pelicula of peliculas; track pelicula.id) {
+                <div class="col">
+                    <app-movie-card [movie]="pelicula"></app-movie-card>
+                </div>
+                }
+            </div>
+
+            <!-- Paginación -->
+            @if (totalResults > 20) {
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Navegación de páginas">
+                    <ul class="pagination cyber-pagination">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                            <button class="page-link" (click)="onPageChange(currentPage - 1)">
+                                Anterior
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <span class="page-link">Página {{ currentPage }}</span>
+                        </li>
+                        <li class="page-item" [class.disabled]="!peliculas.length">
+                            <button class="page-link" (click)="onPageChange(currentPage + 1)">
+                                Siguiente
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            }
+            } @else {
+            <div class="text-center py-5">
+                <p class="mb-0">No se encontraron resultados</p>
+            </div>
+            }
+            }
+        </div>
+    </div>
+</div>
