@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, KeyValue } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -64,7 +64,7 @@ export class MovieDetailComponent implements OnInit {
       );
       return anyTrailer ? anyTrailer.key : '';
     }
-    console.log(trailer)
+    // console.log(trailer)
     return trailer.key;
   }
 
@@ -72,5 +72,59 @@ export class MovieDetailComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(
       `https://www.youtube.com/embed/${key}`
     );
+  }
+
+
+  // Obtener actores principales (cast)
+  getCast(): any[] {
+    return this.pelicula?.credits?.cast || [];
+  }
+
+  // Obtener equipo técnico agrupado por departamento
+  getKeyCrewMembers() {
+    if (!this.pelicula?.credits?.crew) return [];
+
+    const keyRoles = {
+      'Dirección': ['Director'],
+      'Guion': ['Screenplay', 'Writer', 'Story'],
+      'Producción': ['Producer', 'Executive Producer'],
+      'Fotografía': ['Director of Photography', 'Cinematographer'],
+      'Música': ['Music Director', 'Original Music Composer'],
+      'Arte': ['Production Design', 'Art Direction'],
+      'Sonido': ['Sound Director', 'Sound Designer'],
+      'Vestuario': ['Costume Design'],
+      'Montaje': ['Editor'],
+    };
+
+    return Object.entries(keyRoles).map(([department, roles]) => ({
+      department,
+      members: this.pelicula.credits.crew.filter((person: any) =>
+        roles.includes(person.job)
+      )
+    })).filter(dept => dept.members.length > 0);
+  }
+
+  getDirector(): any {
+    return this.pelicula?.credits?.crew.find((person: any) => person.job === 'Director');
+  }
+
+  scrollSection(sectionId: string, direction: 'left' | 'right') {
+    const container = document.getElementById(sectionId);
+    if (!container) return;
+
+    const scrollContent = container.querySelector('.scroll-content') as HTMLElement;
+    if (!scrollContent) return;
+
+    const scrollAmount = 400; // Puedes ajustar este valor
+    const currentScroll = scrollContent.scrollLeft;
+
+    const newScroll = direction === 'right'
+      ? currentScroll + scrollAmount
+      : currentScroll - scrollAmount;
+
+    scrollContent.scrollTo({
+      left: newScroll,
+      behavior: 'smooth'
+    });
   }
 }

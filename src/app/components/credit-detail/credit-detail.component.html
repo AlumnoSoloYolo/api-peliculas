@@ -1,0 +1,115 @@
+<div class="container-fluid p-0">
+    <!-- Cargando... -->
+    <div *ngIf="loading">
+        <div class="spinner">...</div>
+    </div>
+    <div *ngIf="!loading && person">
+        <div class="hero-section">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img *ngIf="person.profile_path" [src]="'https://image.tmdb.org/t/p/w500' + person.profile_path"
+                            [alt]="person.name" class="profile-image">
+                    </div>
+                    <div class="col-md-9">
+                        <h1>{{person.name}}</h1>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">Fecha nacimiento: </span>
+                                <span>{{person.birthday | date:'dd-MM-YYYY'}}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Lugar nacimiento: </span>
+                                <span>{{person.place_of_birth}}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Departamento: </span>
+                                <span>{{person.known_for_department}}</span>
+                            </div>
+                        </div>
+                        <div class="biography mt-4">
+                            <h2>Biografía: </h2>
+                            <p>{{person.biography}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <div class="container mt-5">
+                <h2 class="section-title mb-4">Filmografía</h2>
+
+                @if (person.known_for_department !== 'Acting' && person.movie_credits?.crew?.length) {
+                <section class="mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="scroll-buttons">
+                            <button class="scroll-btn prev" (click)="scrollSection('crewSection', 'left')">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="scroll-btn next" (click)="scrollSection('crewSection', 'right')">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="movie-scroll" id="crewSection">
+                        <div class="movie-scroll-content">
+                            @for (movie of person.movie_credits.crew; track movie.id) {
+                            <div class="flex col-lg-3 col-md-4 col-12">
+                                <div class="movie-card-wrapper">
+                                    <app-movie-card [movie]="movie"></app-movie-card>
+                                    <div class="movie-card-overlay">
+                                        <span class="role" [class]="getRoleClass(movie.job)">{{movie.job}}</span>
+                                        <span class="department">{{movie.department}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </section>
+                }
+
+                <!-- Sección para Actor -->
+                @if (person.known_for_department === 'Acting' && person.movie_credits?.cast?.length) {
+                <section class="mb-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>Como Actor</h3>
+                        <div class="scroll-buttons">
+                            <button class="scroll-btn prev" (click)="scrollSection('castSection', 'left')">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <button class="scroll-btn next" (click)="scrollSection('castSection', 'right')">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="movie-scroll" id="castSection">
+                        <div class="movie-scroll-content">
+                            @for (movie of person.movie_credits.cast; track movie.id) {
+                            <div class="flex col-lg-3 col-md-4 col-12">
+                                <app-movie-card [movie]="movie"></app-movie-card>
+                                <div class="role-info">
+                                    <span class="character">{{movie.character || 'Sin personaje especificado'}}</span>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                    </div>
+                </section>
+                }
+
+                <!-- Mensaje si no hay datos -->
+                @if (!person.movie_credits?.crew?.length && !person.movie_credits?.cast?.length) {
+                <div class="alert alert-info">
+                    No se encontraron películas para esta persona.
+                </div>
+                }
+            </div>
+
+
+        </div>
+    </div>
+</div>

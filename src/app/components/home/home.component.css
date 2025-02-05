@@ -18,6 +18,16 @@
     height: 1px;
     background: linear-gradient(45deg, rgb(14, 64, 64), rgb(211, 20, 211));
   }
+
+  .carousel-control-prev, .carousel-control-next {
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  .badge{
+    color:  rgb(14, 64, 64) ;
+  }
   
   
   .backdrop-image {
@@ -25,7 +35,38 @@
     height: 100%;
     object-fit: cover;
     filter: brightness(0.6) saturate(1.2);
+    z-index: 1;
   }
+
+
+  .backdrop-overlay {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50%; 
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    z-index: 2; 
+}
+
+
+ 
+
+.movie-info {
+    position: absolute;
+    top: 70%;
+    left: 0;
+    right: 0;
+    bottom: 2px;
+    z-index: 3; /* Asegura que el contenido esté encima de la imagen */
+    color: white; /* Asegura que el texto sea visible */
+}
+
+.container {
+    position: relative;
+    z-index: 3; /* En caso de que haya otros elementos dentro */
+}
+
   
   
   

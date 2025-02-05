@@ -21,11 +21,18 @@
                 </div>
                 <div class="col-md-9">
                     <h1 class="movie-title cyber-title">{{pelicula.title}}</h1>
-                    <div class="movie-meta">
+                    <p class="overview mt-2">{{pelicula.overview}}</p>
+                    @if (getDirector()) {
+                    <div class="director mt-4">
+                        <span class="text-muted">Director: </span>
+                        <span class="text-light">{{getDirector().name}}</span>
+                    </div>
+                    }
+                    <div class="movie-meta mt-4">
                         <span class="meta-item">{{pelicula.release_date | date:'yyyy'}}</span>
-                        <span class="separator">•</span>
+                        <span class="separator mx-3">•</span>
                         <span class="meta-item">{{pelicula.runtime}} min</span>
-                        <span class="separator">•</span>
+                        <span class="separator mx-3">•</span>
                         <span class="meta-item rating">
                             <i class="bi bi-star-fill text-warning"></i>
                             {{pelicula.vote_average | number:'1.1-1'}}
@@ -61,33 +68,84 @@
 
         <!-- Cast Section -->
         @if (pelicula.credits?.cast?.length) {
-        <!-- Cast Section actualizado -->
-        <section class="mb-5">
-            <h2 class="section-title">Reparto Principal</h2>
-            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
-                @for (actor of pelicula.credits.cast.slice(0, 6); track actor.id) {
-                <div class="col">
-                    <div class="movie-card cast-card">
-                        <div class="card-content">
-                            @if (actor.profile_path) {
-                            <img [src]="'https://image.tmdb.org/t/p/w200' + actor.profile_path" class="card-img-top"
-                                [alt]="actor.name">
-                            } @else {
-                            <div class="placeholder-image">
-                                <i class="bi bi-person-fill fs-1"></i>
-                            </div>
-                            }
-                            <div class="card-body">
-                                <h6 class="mb-1">{{actor.name}}</h6>
-                                <small class="text-muted">{{actor.character}}</small>
+        <section class="movie-section mb-5">
+            <div class="section-header">
+                <h2 class="section-title mb-4">Reparto</h2>
+                <div class="section-navigation">
+                    <button class="btn btn-prev" (click)="scrollSection('castSection', 'left')">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-next" (click)="scrollSection('castSection', 'right')">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="castSection" class="movie-scroll-container">
+                <div class="scroll-content p-3">
+                    @for (actor of getCast(); track actor.id) {
+                    <div class="scroll-item">
+                        <div class="cast-card" [routerLink]="['/persona', actor.id]">
+                            <div class="card-content">
+                                @if (actor.profile_path) {
+                                <img [src]="'https://image.tmdb.org/t/p/w200' + actor.profile_path" [alt]="actor.name">
+                                } @else {
+                                <div class="placeholder-image">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                }
+                                <div class="card-body">
+                                    <h6 class="mb-1">{{actor.name}}</h6>
+                                    <small class="text-muted">{{actor.character}}</small>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
-                }
             </div>
         </section>
 
+        <!-- Crew Section -->
+        <section class="movie-section mb-5">
+            <div class="section-header">
+                <h2 class="section-title mb-4">Equipo Principal</h2>
+                <div class="section-navigation">
+                    <button class="btn btn-prev" (click)="scrollSection('keyCrewSection', 'left')">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-next" (click)="scrollSection('keyCrewSection', 'right')">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="keyCrewSection" class="movie-scroll-container">
+                <div class="scroll-content p-3">
+                    @for (department of getKeyCrewMembers(); track department.department) {
+                    @for (person of department.members; track person.id) {
+                    <div class="scroll-item">
+                        <div class="crew-card" [routerLink]="['/persona', person.id]">
+                            <div class="card-content">
+                                @if (person.profile_path) {
+                                <img [src]="'https://image.tmdb.org/t/p/w200' + person.profile_path"
+                                    [alt]="person.name">
+                                } @else {
+                                <div class="placeholder-image">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                }
+                                <div class="card-body">
+                                    <h6 class="mb-1">{{person.name}}</h6>
+                                    <small class="text-muted">{{department.department}}</small>
+                                    <small class="text-muted d-block">{{person.job}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    }
+                </div>
+            </div>
+        </section>
         <!-- Reviews Section actualizado -->
         <section class="mb-5">
             <h2 class="section-title">Reseñas</h2>

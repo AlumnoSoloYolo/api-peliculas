@@ -9,6 +9,7 @@
                     <div class="movie-backdrop" [routerLink]="['/pelicula', pelicula.id]">
                         <img [src]="'https://image.tmdb.org/t/p/original' + pelicula.backdrop_path"
                             [alt]="pelicula.title" class="backdrop-image">
+                        <div class="backdrop-overlay"></div>
                         <div class="movie-info">
                             <div class="container">
                                 <h2 class="movie-title">{{pelicula.title}}</h2>
@@ -42,7 +43,41 @@
             </button>
         </div>
 
+
+
+
         <div class="container mt-5">
+
+
+            <!-- Géneros -->
+            <div class="movie-section">
+                <div class="section-header">
+                    <h2 class="section-title mb-4">Géneros</h2>
+                    <div class="section-navigation">
+                        <button class="btn btn-prev" (click)="scrollSection('generos', 'left')">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-next" (click)="scrollSection('generos', 'right')">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="generos" class="movie-scroll-container">
+                    <div class="movie-scroll-content p-3">
+                        @for (genero of generos; track genero.id) {
+                        <div class="movie-scroll-item">
+                            <div class="genre-card">
+                                <div class="card-content text-center">
+                                    <h5 class="mb-0 text-light">{{ genero.name }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+
             <!-- Películas Mejor Valoradas -->
             <div class="movie-section">
                 <div class="section-header">
@@ -139,33 +174,7 @@
                 </div>
             </div>
 
-            <!-- Géneros -->
-            <div class="movie-section">
-                <div class="section-header">
-                    <h2 class="section-title mb-4">Géneros</h2>
-                    <div class="section-navigation">
-                        <button class="btn btn-prev" (click)="scrollSection('generos', 'left')">
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
-                        <button class="btn btn-next" (click)="scrollSection('generos', 'right')">
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="generos" class="movie-scroll-container">
-                    <div class="movie-scroll-content p-3">
-                        @for (genero of generos; track genero.id) {
-                        <div class="movie-scroll-item">
-                            <div class="genre-card">
-                                <div class="card-content text-center">
-                                    <h5 class="mb-0 text-light">{{ genero.name }}</h5>
-                                </div>
-                            </div>
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

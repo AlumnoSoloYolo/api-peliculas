@@ -24,3 +24,182 @@
   .form-group {
     margin-bottom: 0.5rem;
   }
+
+  .scroll-top-btn {
+    position: sticky;
+    float: right;
+    top: calc(100vh - 80px);
+    margin-right: 20px;
+    z-index: 1000;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .scroll-top-btn.visible {
+    opacity: 1;
+  }
+
+
+  .cyber-window {
+    background: rgba(16, 18, 27, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+}
+
+/* Barra de búsqueda principal */
+.search-input-wrapper {
+    position: relative;
+}
+
+.main-search-input {
+    height: 48px;
+    padding-left: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.main-search-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Estilos generales del contenedor */
+.cyber-window {
+  background: rgba(13, 17, 23, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+}
+
+/* Sobrescribir estilos de Bootstrap para inputs y selects */
+.form-control,
+.form-select,
+.input-group-text,
+select[multiple],
+.card.bg-light {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Opciones del select */
+.form-select option,
+select[multiple] option {
+  background-color: rgb(30, 35, 40) !important;
+  color: white !important;
+}
+
+/* Estilos hover y focus */
+.form-control:focus,
+.form-select:focus {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(33, 150, 243, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.25) !important;
+  color: white !important;
+}
+
+/* Estilos para el select múltiple de géneros */
+select[multiple] {
+  min-height: 150px;
+}
+
+select[multiple] option:checked {
+  background: linear-gradient(45deg, #2196f3, #21CBF3) !important;
+  color: white !important;
+}
+
+/* Panel de filtros */
+.card.bg-light {
+  background: rgba(30, 35, 40, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Grupo de inputs */
+.input-group-text {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Placeholders */
+::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Botones */
+.btn-primary {
+  background: linear-gradient(45deg, #2196f3, #21CBF3) !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #1e88e5, #1eb8e5) !important;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3) !important;
+}
+
+/* Labels */
+.form-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.form-label i {
+  color: #2196f3;
+}
+
+/* Corregir dropdown de Bootstrap */
+.dropdown-menu {
+  background: rgb(30, 35, 40) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item {
+  color: white !important;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+/* Mensajes de error */
+.invalid-feedback {
+  color: #ff4d4f;
+}
+
+/* Animaciones */
+.collapse {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .input-group {
+      flex-wrap: nowrap;
+  }
+  
+  .input-group .btn {
+      padding: 0.5rem;
+  }
+}

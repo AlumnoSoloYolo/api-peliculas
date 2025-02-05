@@ -1,0 +1,141 @@
+/* credit-detail.component.css */
+.movie-scroll {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+  }
+  
+  .movie-scroll-content {
+    display: flex;
+    gap: 1rem;
+    transition: transform 0.5s ease;
+  }
+  
+  .movie-scroll-item {
+    min-width: 180px; /* Reducido de 200px */
+    flex-shrink: 0;
+  }
+  
+  /* Para hacer las tarjetas más pequeñas */
+  :host ::ng-deep .movie-scroll-item .movie-card {
+    width: 180px; /* Ancho fijo más pequeño */
+  }
+  
+  :host ::ng-deep .movie-scroll-item .movie-card img {
+    height: 270px; /* Altura proporcional al nuevo ancho (ratio 2:3) */
+    object-fit: cover;
+  }
+  
+  /* Roles y trabajo */
+  .role-info {
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 8px 8px;
+    text-align: center;
+  }
+  
+  .job-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #ffd700; /* Color dorado para trabajos */
+    margin-bottom: 4px;
+  }
+  
+  .department {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .character {
+    font-size: 0.9rem;
+    color: #87ceeb; /* Color azul claro para personajes */
+  }
+  
+  /* Botones de scroll */
+  .scroll-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .scroll-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .scroll-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Secciones */
+  .section-title {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    color: white;
+    font-size: 1.3rem;
+  }
+
+
+  .movie-card-wrapper {
+    position: relative;
+    width: 100%; /* Adjust as needed */
+}
+
+.movie-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+    padding: 10px 5px;
+    border-radius: 0 0 8px 8px;
+    z-index: 10;
+}
+
+.movie-card-overlay .role {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+    text-align: center;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-card-overlay .department {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Role color classes */
+.role-director { color: #ffd700; } /* Gold for directors */
+.role-producer { color: #87ceeb; } /* Light blue for producers */
+.role-writer { color: #98fb98; } /* Pale green for writers */
+.role-editor { color: #dda0dd; } /* Plum for editors */
+.role-cinematographer { color: #f0e68c; } /* Khaki for cinematographers */
+.role-composer { color: #e6e6fa; } /* Lavender for composers */
+.role-other { color: #ffffff; } /* White for other roles */

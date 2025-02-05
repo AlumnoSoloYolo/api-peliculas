@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ReactiveFormsModule,
@@ -48,14 +48,18 @@ export class SearchComponent implements OnInit {
       Validators.max(10)
     ])
   }, { validators: SearchComponent.ratingRangeValidator });
+
   peliculas: any[] = [];
   generos: any[] = [];
   loading = false;
   totalResults = 0;
   currentPage = 1;
   submitted = false;
+  showScrollTop = false;
+  private hasMorePages = true;
+  private isLoading = false;
+  private scrollThreshold = 200;
 
-  // Opciones de año y ordenamiento más limpias
   yearOptions = this.generateYearOptions();
   sortOptions = [
     { value: 'popularity.desc', label: 'Popularidad (Mayor a menor)' },
@@ -63,16 +67,29 @@ export class SearchComponent implements OnInit {
     { value: 'vote_average.desc', label: 'Valoración (Mayor a menor)' },
     { value: 'vote_average.asc', label: 'Valoración (Menor a mayor)' },
     { value: 'release_date.desc', label: 'Fecha (Más recientes)' },
-    { value: 'release_date.asc', label: 'Fecha (Más antiguas)' }
+    { value: 'release_date.asc', label: 'Fecha (Más antiguas)' },
+    { value: 'title.asc', label: 'Título (A-Z)' },
+    { value: 'title.desc', label: 'Título (Z-A)' }
   ];
 
   constructor(private movieService: MovieService) { }
+
+  @HostListener('window:scroll')
+  onWindowScroll() {
+    // Mostrar/ocultar botón de volver arriba
+    this.showScrollTop = window.pageYOffset > 500;
+
+    // Verificar scroll para cargar más películas
+    if (this.shouldLoadMore()) {
+      this.loadMoreMovies();
+    }
+  }
 
   ngOnInit() {
     this.initForm();
     this.loadGenres();
     this.setupSearchSubscription();
-    this.search(); // Búsqueda inicial
+    this.search();
   }
 
   private initForm() {
@@ -98,14 +115,13 @@ export class SearchComponent implements OnInit {
     }, { validators: SearchComponent.ratingRangeValidator });
   }
 
-  // Validador estático para el rango de calificación
   static ratingRangeValidator(control: AbstractControl): ValidationErrors | null {
     const group = control as FormGroup;
     const minRating = group.get('minRating')?.value;
     const maxRating = group.get('maxRating')?.value;
 
     if (minRating && maxRating && Number(minRating) > Number(maxRating)) {
-      return { ratingRange: true };  // Retorna un error cuando el mínimo es mayor que el máximo
+      return { ratingRange: true };
     }
     return null;
   }
@@ -123,7 +139,6 @@ export class SearchComponent implements OnInit {
     this.searchForm.valueChanges.pipe(
       debounceTime(500),
       distinctUntilChanged((prev, curr) => {
-        // Ignorar cambios en página
         const prevWithoutPage = { ...prev, page: undefined };
         const currWithoutPage = { ...curr, page: undefined };
         return JSON.stringify(prevWithoutPage) === JSON.stringify(currWithoutPage);
@@ -131,15 +146,63 @@ export class SearchComponent implements OnInit {
     ).subscribe(() => {
       if (this.searchForm.valid) {
         this.currentPage = 1;
+        this.hasMorePages = true;
         this.search();
       }
     });
   }
 
+  private shouldLoadMore(): boolean {
+    if (this.isLoading || !this.hasMorePages) return false;
+
+    const scrollPosition = window.pageYOffset + window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    return (documentHeight - scrollPosition) < this.scrollThreshold;
+  }
+
+  private loadMoreMovies() {
+    if (this.isLoading || !this.hasMorePages) return;
+
+    this.isLoading = true;
+    this.loading = true;
+    this.currentPage++;
+
+    const searchParams = this.prepareSearchParams();
+
+    this.movieService.busquedaAvanzadaPeliculas(searchParams).subscribe({
+      next: (response) => {
+        if (response.results.length === 0) {
+          this.hasMorePages = false;
+        } else {
+          this.peliculas = [...this.peliculas, ...response.results];
+          this.totalResults = response.total_results;
+        }
+        this.loading = false;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error cargando más películas:', error);
+        this.loading = false;
+        this.isLoading = false;
+      }
+    });
+  }
+
+  scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
   search() {
-    this.submitted = true;  // Establece como true cuando se hace el envío
+    this.submitted = true;
     if (this.searchForm.invalid) return;
 
+    // Reiniciar estados
+    this.currentPage = 1;
+    this.hasMorePages = true;
     this.loading = true;
     const searchParams = this.prepareSearchParams();
 
@@ -147,6 +210,7 @@ export class SearchComponent implements OnInit {
       next: (response) => {
         this.peliculas = response.results;
         this.totalResults = response.total_results;
+        this.hasMorePages = response.results.length > 0;
         this.loading = false;
       },
       error: (error) => {
@@ -157,24 +221,37 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  clearFilters() {
+    this.submitted = false;
+    this.searchForm.reset({
+      sortBy: 'popularity.desc'
+    });
+    this.currentPage = 1;
+    this.hasMorePages = true;
+    this.search();
+  }
+
+  private generateYearOptions(): number[] {
+    const currentYear = new Date().getFullYear();
+    return Array.from(
+      { length: currentYear - 1900 + 2 },
+      (_, i) => currentYear + 1 - i
+    );
+  }
 
   private prepareSearchParams() {
     const formValue = this.searchForm.value;
 
-    // Objeto base de parámetros siempre incluye la página y el ordenamiento
     const searchParams: any = {
       page: this.currentPage,
       sortBy: formValue.sortBy || 'popularity.desc'
     };
 
-    // Manejar query de título de manera más robusta
     const trimmedQuery = formValue.query?.trim();
     if (trimmedQuery) {
-      // Si hay query, usar endpoint de búsqueda
       searchParams.query = trimmedQuery;
     }
 
-    // Resto de filtros se añaden independientemente de la query
     if (formValue.year) {
       searchParams.year = formValue.year;
     }
@@ -184,7 +261,6 @@ export class SearchComponent implements OnInit {
       searchParams.genreIds = validGenres;
     }
 
-    // Filtros de calificación
     if (formValue.minRating) {
       searchParams.minRating = formValue.minRating;
     }
@@ -194,27 +270,6 @@ export class SearchComponent implements OnInit {
     }
 
     return searchParams;
-  }
-  onPageChange(page: number) {
-    this.currentPage = page;
-    this.search();
-  }
-
-  clearFilters() {
-    this.submitted = false;
-    this.searchForm.reset({
-      sortBy: 'popularity.desc'
-    });
-    this.search();
-  }
-
-  // Método para generar opciones de año
-  private generateYearOptions(): number[] {
-    const currentYear = new Date().getFullYear();
-    return Array.from(
-      { length: currentYear - 1900 + 2 },
-      (_, i) => currentYear + 1 - i
-    );
   }
 
   getErrorMessage(controlName: string): string {
@@ -247,13 +302,9 @@ export class SearchComponent implements OnInit {
 
     return '';
   }
-  // Método para verificar si un control tiene error
+
   hasError(controlName: string): boolean {
     const control = this.searchForm.get(controlName);
     return !!(control && control.errors && (control.dirty || control.touched));
   }
-
-
-
 }
-

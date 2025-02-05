@@ -3,13 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
 import { GenreUtilsService } from '../../../services/genre-utils.service';
-import { VotoColorPipe } from '../../shared/pipes/voto-color.pipe';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterModule, VotoColorPipe, MovieCardComponent],
+  imports: [CommonModule, RouterModule, MovieCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

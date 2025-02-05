@@ -50,6 +50,15 @@ export class MovieService {
     });
   };
 
+  getPersonaCreditos(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/person/${id}`, {
+      headers: this.headers,
+      params: {
+        append_to_response: 'movie_credits,images'
+      }
+    });
+  }
+
 
   busquedaAvanzadaPeliculas(params: {
     query?: string,
@@ -65,19 +74,16 @@ export class MovieService {
       page: params.page || 1
     };
 
-    // Cambio clave: usar discover/movie incluso con query
     const endpoint = '/discover/movie';
 
-    // Añadir query si existe (importante para búsqueda con otros filtros)
     if (params.query) {
-      searchParams.with_text_query = params.query; // Cambio de nombre del parámetro
+      searchParams.with_text_query = params.query;
     }
 
     if (params.year) {
       searchParams.primary_release_year = params.year;
     }
 
-    // Corrección en el manejo de géneros
     if (params.genreIds && params.genreIds.length > 0) {
       searchParams.with_genres = params.genreIds.join(',');
     }
@@ -100,7 +106,6 @@ export class MovieService {
     });
   }
 
-  // Método para obtener géneros
   getGeneros(): Observable<any> {
     return this.http.get(`${this.baseUrl}/genre/movie/list`, {
       headers: this.headers
