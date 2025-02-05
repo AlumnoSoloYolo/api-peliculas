@@ -17,9 +17,13 @@
             </p>
 
             <div class="genre-tags">
-                <span *ngFor="let genreName of getNombreGeneros(movie.genre_ids)" class="cyber-badge text-white mx-1">
-                    {{ genreName }}
+
+                @for(nombreGenero of getGeneros(movie.genre_ids); track nombreGenero){
+                <span class="cyber-badge text-white mx-1">
+                    {{ nombreGenero}}
                 </span>
+                }
+
             </div>
 
             <small class=" text-white release-date text-light opacity-75">

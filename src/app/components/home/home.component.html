@@ -14,7 +14,7 @@
                             <div class="container">
                                 <h2 class="movie-title">{{pelicula.title}}</h2>
                                 <div class="d-flex gap-3 align-items-center">
-                                    <span class="badge" [style.background-color]="getVotoColor(pelicula.vote_average)">
+                                    <span class="badge" [style.background-color]="pelicula.vote_average | votoColor">
                                         <i class="bi bi-star-fill"></i>
                                         {{ pelicula.vote_average | number:'1.1-1' }}
                                     </span>

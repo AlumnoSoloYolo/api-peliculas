@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
-import { GenreUtilsService } from '../../../services/genre-utils.service';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
+import { VotoColorPipe } from '../../shared/pipes/voto-color.pipe';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterModule, MovieCardComponent],
+  imports: [CommonModule, RouterModule, MovieCardComponent, VotoColorPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -21,9 +21,7 @@ export class HomeComponent implements OnInit {
   generos: any[] = []
 
 
-  constructor(private movieService: MovieService,
-    private genreUtils: GenreUtilsService
-  ) { }
+  constructor(private movieService: MovieService) { }
 
   ngOnInit() {
     this.populares();
@@ -77,7 +75,6 @@ export class HomeComponent implements OnInit {
     this.movieService.getProximosEstrenos()
       .subscribe({
         next: (response) => {
-          // Filter movies with release date in 2025 or later
           this.peliculasEstreno = response.results.filter((pelicula: any) => {
             const releaseYear = new Date(pelicula.release_date).getFullYear();
             return releaseYear >= 2025;
@@ -106,12 +103,12 @@ export class HomeComponent implements OnInit {
   listarGeneros() {
     this.movieService.getGeneros().subscribe({
       next: (response) => {
-        console.log('Respuesta completa de géneros:', response);
+
         if (response && response.genres) {
           this.generos = response.genres;
           console.log('Géneros asignados:', this.generos);
         } else {
-          console.error('Formato de respuesta incorrecto:', response);
+          console.error('Formato incorrecto:', response);
         }
       },
       error: (error) => {
@@ -120,25 +117,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  getNombreGeneros(genreIds: number[]): string[] {
-    return this.genreUtils.getnombreGeneros(genreIds);
-  }
-
-  getVotoColor(rating: number): string {
-    const ratingNormalizado = Math.min(Math.max(rating, 0), 10);
-
-    if (ratingNormalizado <= 5) {
-      // De 0 a 5: Rojo a Amarillo
-      const rojo = Math.round(255);
-      const verde = Math.round(255 * (ratingNormalizado / 5));
-      return `rgb(${rojo}, ${verde}, 0)`;
-    } else {
-      // De 5 a 10: Amarillo a Verde
-      const rojo = Math.round(255 * (1 - (ratingNormalizado - 5) / 5));
-      const verde = Math.round(255);
-      return `rgb(${rojo}, ${verde}, 0)`;
-    }
-  }
 
   scrollSection(sectionId: string, direction: 'left' | 'right') {
     const container = document.getElementById(sectionId);

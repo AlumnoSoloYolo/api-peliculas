@@ -45,6 +45,10 @@
   padding: 4rem 0;
 }
 
+.crew-card, .cast-card, .movie-card{
+  cursor: pointer;
+}
+
 .poster-image {
   width: 100%;
   border-radius: 15px;
@@ -59,6 +63,7 @@
   background: linear-gradient(45deg, rgba(0,0,0,0.5), rgba(255,255,255,0.1));
   transition: all 0.3s ease;
   height: 100%;
+  cursor: pointer;
 }
 
 .movie-card::before {
@@ -86,7 +91,7 @@
   height: 100%;
 }
 
-/* Cast Cards */
+
 .cast-card .card-img-top {
   height: 300px;
   object-fit: cover;
@@ -118,7 +123,7 @@
   margin: 1rem 0;
 }
 
-/* Similar Movies */
+
 .similar-movie .card-img-top {
   height: 350px;
   object-fit: cover;
@@ -128,7 +133,7 @@
   padding: 1rem;
 }
 
-/* Typography */
+
 .section-title {
   font-size: 1.8rem;
   margin-bottom: 2rem;

@@ -49,14 +49,14 @@ export class MovieDetailComponent implements OnInit {
   getTrailerKey(videos: any[]): string {
     if (!videos || !videos.length) return '';
 
-    // Buscamos primero un trailer oficial
+
     const trailer = videos.find(
       video => video.type === 'Trailer' &&
         video.site === 'YouTube' &&
         video.official === true
     );
 
-    // Si no hay trailer oficial, buscamos cualquier trailer
+
     if (!trailer) {
       const anyTrailer = videos.find(
         video => video.type === 'Trailer' &&
@@ -64,7 +64,7 @@ export class MovieDetailComponent implements OnInit {
       );
       return anyTrailer ? anyTrailer.key : '';
     }
-    // console.log(trailer)
+
     return trailer.key;
   }
 
@@ -75,12 +75,12 @@ export class MovieDetailComponent implements OnInit {
   }
 
 
-  // Obtener actores principales (cast)
+
   getCast(): any[] {
     return this.pelicula?.credits?.cast || [];
   }
 
-  // Obtener equipo técnico agrupado por departamento
+
   getKeyCrewMembers() {
     if (!this.pelicula?.credits?.crew) return [];
 

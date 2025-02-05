@@ -16,7 +16,7 @@ export class MovieCardComponent {
 
   constructor(private genreUtils: GenreUtilsService) { }
 
-  getNombreGeneros(genreIds: number[]): string[] {
+  getGeneros(genreIds: number[]): string[] {
     return this.genreUtils.getnombreGeneros(genreIds);
   }
 }
