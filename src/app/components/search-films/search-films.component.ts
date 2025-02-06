@@ -27,7 +27,9 @@ import { MovieCardComponent } from '../movie-card/movie-card.component';
   styleUrls: ['./search-films.component.css']
 })
 export class SearchComponent implements OnInit {
-  searchForm: UntypedFormGroup = new FormGroup({
+
+
+  searchForm: FormGroup = new FormGroup({
     query: new FormControl('', [
       Validators.minLength(2),
       Validators.maxLength(50)
@@ -76,9 +78,7 @@ export class SearchComponent implements OnInit {
 
   @HostListener('window:scroll')
   onWindowScroll() {
-    // Mostrar/ocultar botón de volver arriba
-    this.showScrollTop = window.pageYOffset > 500;
-
+  
     // Verificar scroll para cargar más películas
     if (this.shouldLoadMore()) {
       this.loadMoreMovies();

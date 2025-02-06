@@ -40,7 +40,7 @@ export class MovieDetailComponent implements OnInit {
         console.log(this.pelicula)
       },
       error: (error) => {
-        console.error('Error al cargar los detalles de la canción', error);
+        console.error('Error al cargar los detalles de las películas', error);
         this.loading = false;
       }
     })

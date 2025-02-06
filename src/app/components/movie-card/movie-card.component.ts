@@ -19,4 +19,6 @@ export class MovieCardComponent {
   getGeneros(genreIds: number[]): string[] {
     return this.genreUtils.getnombreGeneros(genreIds);
   }
+
+ 
 }

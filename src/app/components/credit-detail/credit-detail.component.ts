@@ -3,52 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../../services/movie.service';
-import { VotoColorPipe } from '../../shared/pipes/voto-color.pipe';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
-import { CastMember, CrewMember } from '../../interfaces/credits.ts';
-
-interface MovieCredits {
-  cast?: {
-    id: number;
-    title: string;
-    character: string;
-    poster_path: string | null;
-    vote_average: number;
-    release_date: string;
-  }[];
-  crew?: {
-    id: number;
-    title: string;
-    job: string;
-    department: string;
-    poster_path: string | null;
-    vote_average: number;
-    release_date: string;
-  }[];
-}
-
-interface PersonDetails {
-  adult: boolean;
-  also_known_as: string[];
-  biography: string;
-  birthday: string;
-  deathday: string | null;
-  gender: number;
-  homepage: string | null;
-  id: number;
-  imdb_id: string;
-  known_for_department: string;
-  name: string;
-  place_of_birth: string;
-  popularity: number;
-  profile_path: string | null;
-  movie_credits: MovieCredits;
-}
-
+ 
 @Component({
   selector: 'app-detail-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, VotoColorPipe, MovieCardComponent],
+  imports: [CommonModule, RouterModule, MovieCardComponent],
   templateUrl: './credit-detail.component.html',
   styleUrl: './credit-detail.component.css'
 })
@@ -70,7 +30,7 @@ export class CreditDetailComponent implements OnInit {
   }
 
   cargarDetallesPersona(id: string) {
-    this.loading = true;
+
     this.movieService.getPersonaCreditos(id).subscribe({
       next: (data) => {
         this.person = data;
@@ -80,7 +40,6 @@ export class CreditDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los detalles de la persona', error);
-        this.loading = false;
       }
     });
   }

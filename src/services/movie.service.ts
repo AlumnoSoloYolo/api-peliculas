@@ -41,6 +41,13 @@ export class MovieService {
   }
 
 
+  getGeneros(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/genre/movie/list`, {
+      headers: this.headers
+    });
+  }
+
+
   getDetallesPelicula(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/movie/${id}`, {
       headers: this.headers,
@@ -103,12 +110,6 @@ export class MovieService {
     return this.http.get(`${this.baseUrl}${endpoint}`, {
       headers: this.headers,
       params: searchParams
-    });
-  }
-
-  getGeneros(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/genre/movie/list`, {
-      headers: this.headers
     });
   }
 

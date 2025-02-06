@@ -9,4 +9,10 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
 
+    constructor(private router: Router){
+    }
+
+    buscar(): void {
+      this.router.navigate(["/peliculas"])
+    }
 }
