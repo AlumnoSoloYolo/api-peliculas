@@ -16,5 +16,5 @@ import { FondoComponent } from './components/fondo/fondo.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'invoice-app';
+
 }

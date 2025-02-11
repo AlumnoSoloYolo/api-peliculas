@@ -1,0 +1,116 @@
+<div class="profile-container">
+    @if (userProfile) {
+    <div class="profile-header">
+        <div class="avatar-section">
+            <img [src]="getAvatarPath()" alt="Avatar" class="profile-avatar">
+            <h2>{{ userProfile.username }}</h2>
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-item">
+                <span class="stat-number">{{ getPendientesCount() }}</span>
+                <span class="stat-label">Películas Pendientes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ getVistasCount() }}</span>
+                <span class="stat-label">Películas Vistas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ getReviewsCount() }}</span>
+                <span class="stat-label">Reseñas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-details">
+        <div class="detail-section">
+            <h3>Información Personal</h3>
+            <p><strong>Correo Electrónico:</strong> {{ userProfile.email }}</p>
+            <p><strong>Miembro desde:</strong> {{ userProfile.createdAt | date:'mediumDate' }}</p>
+        </div>
+
+        <div class="profile-sections">
+            <!-- Sección de Películas Pendientes -->
+            <div class="movie-section">
+                <div class="section-header">
+                    <h2 class="section-title mb-4">Películas Pendientes</h2>
+                    <div class="section-navigation">
+                        <button class="btn btn-prev" (click)="scrollSection('pendientes', 'left')">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-next" (click)="scrollSection('pendientes', 'right')">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="pendientes" class="movie-scroll-container">
+                    <div class="movie-scroll-content p-3">
+                        @for (pelicula of peliculasPendientes; track pelicula.id) {
+                        <div class="movie-scroll-item">
+                            <div class="movie-card" [routerLink]="['/pelicula', pelicula.id]">
+                                <img [src]="'https://image.tmdb.org/t/p/w200' + pelicula.poster_path"
+                                    [alt]="pelicula.title" class="movie-poster" *ngIf="pelicula.poster_path">
+                                <div class="movie-info">
+                                    <h4>{{ pelicula.title }}</h4>
+                                    <div class="movie-meta">
+                                        <span class="year">{{ pelicula.release_date | date:'yyyy' }}</span>
+                                        <span class="rating"
+                                            [style.background-color]="pelicula.vote_average | votoColor">
+                                            {{ pelicula.vote_average | number:'1.1-1' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Películas Vistas -->
+            <div class="movie-section">
+                <div class="section-header">
+                    <h2 class="section-title mb-4">Películas Vistas</h2>
+                    <div class="section-navigation">
+                        <button class="btn btn-prev" (click)="scrollSection('vistas', 'left')">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-next" (click)="scrollSection('vistas', 'right')">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="vistas" class="movie-scroll-container">
+                    <div class="movie-scroll-content p-3">
+                        @for (pelicula of peliculasVistas; track pelicula.id) {
+                        <div class="movie-scroll-item">
+                            <div class="movie-card" [routerLink]="['/pelicula', pelicula.id]">
+                                <img [src]="'https://image.tmdb.org/t/p/w200' + pelicula.poster_path"
+                                    [alt]="pelicula.title" class="movie-poster" *ngIf="pelicula.poster_path">
+                                <div class="movie-info">
+                                    <h4>{{ pelicula.title }}</h4>
+                                    <div class="movie-meta">
+                                        <span class="year">{{ pelicula.release_date | date:'yyyy' }}</span>
+                                        <span class="rating"
+                                            [style.background-color]="pelicula.vote_average | votoColor">
+                                            {{ pelicula.vote_average | number:'1.1-1' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Reseñas -->
+            <div class="section">
+                <h3>Mis Reseñas</h3>
+                <p *ngIf="getReviewsCount() === 0">No has publicado reseñas</p>
+                <!-- Implementaremos las reseñas más adelante -->
+            </div>
+        </div>
+    </div>
+    }
+</div>

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, KeyValue } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { MovieService } from '../../../services/movie.service';
+import { MovieService } from '../../services/movie.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VotoColorPipe } from '../../shared/pipes/voto-color.pipe';
+import { UserMovieService } from '../../services/user.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -20,7 +22,8 @@ export class MovieDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private userMovieService: UserMovieService
   ) { }
 
   ngOnInit() {
@@ -127,4 +130,70 @@ export class MovieDetailComponent implements OnInit {
       behavior: 'smooth'
     });
   }
+
+
+  isPendiente(): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.pelisPendientes?.some((p: any) => p.movieId === this.pelicula?.id.toString()) || false;
+  }
+
+  isVista(): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.pelisVistas?.some((p: any) => p.movieId === this.pelicula?.id.toString()) || false;
+  }
+
+  addToPendientes() {
+    if (this.pelicula) {
+      this.userMovieService.addPelisPendientes(this.pelicula.id.toString()).subscribe({
+        next: (response) => {
+          // Actualizar localStorage
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          if (!user.pelisPendientes) user.pelisPendientes = [];
+          user.pelisPendientes.push({
+            movieId: this.pelicula.id.toString(),
+            addedAt: new Date()
+          });
+          // Remover de películas vistas si existe
+          if (user.pelisVistas) {
+            user.pelisVistas = user.pelisVistas.filter(
+              (p: any) => p.movieId !== this.pelicula.id.toString()
+            );
+          }
+          localStorage.setItem('user', JSON.stringify(user));
+          alert('Película añadida a pendientes');
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
+    }
+  }
+
+  addToVistas() {
+    if (this.pelicula) {
+      this.userMovieService.addPelisVistas(this.pelicula.id.toString()).subscribe({
+        next: (response) => {
+          // Actualizar localStorage
+          const user = JSON.parse(localStorage.getItem('user') || '{}');
+          if (!user.pelisVistas) user.pelisVistas = [];
+          user.pelisVistas.push({
+            movieId: this.pelicula.id.toString(),
+            watchedAt: new Date()
+          });
+          // Remover de películas pendientes si existe
+          if (user.pelisPendientes) {
+            user.pelisPendientes = user.pelisPendientes.filter(
+              (p: any) => p.movieId !== this.pelicula.id.toString()
+            );
+          }
+          localStorage.setItem('user', JSON.stringify(user));
+          alert('Película añadida a vistas');
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
+    }
+  }
+
 }

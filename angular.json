@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "invoice-app": {
+    "cometa-films-frontend": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/invoice-app",
+            "outputPath": "dist/cometa-films-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "invoice-app:build:production"
+              "buildTarget": "cometa-films-frontend:build:production"
             },
             "development": {
-              "buildTarget": "invoice-app:build:development"
+              "buildTarget": "cometa-films-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

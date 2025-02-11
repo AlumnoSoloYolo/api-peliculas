@@ -77,3 +77,31 @@
       0 0 10px rgba(0, 255, 255, 0.5),
       0 0 15px rgba(0, 255, 255, 0.3);
 }
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgb(211, 20, 211);
+  margin-right: 10px;
+}
+
+.dropdown-menu {
+  background-color: rgb(16, 25, 25);
+  border: 1px solid rgb(211, 20, 211);
+}
+
+.dropdown-item {
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(211, 20, 211, 0.2);
+  color: rgb(211, 20, 211);
+}
+
+.dropdown .btn {
+  color: #fff;
+}

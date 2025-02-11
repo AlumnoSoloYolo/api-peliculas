@@ -2,9 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { MovieService } from '../../../services/movie.service';
+import { MovieService } from '../../services/movie.service';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
- 
+
 @Component({
   selector: 'app-detail-detail',
   standalone: true,

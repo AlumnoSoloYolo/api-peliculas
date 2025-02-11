@@ -47,6 +47,19 @@
                     <p class="overview mt-4">{{pelicula.overview}}</p>
                 </div>
             </div>
+            <div class="movie-actions">
+                <button (click)="addToPendientes()" [disabled]="isPendiente() || isVista()" class="btn"
+                    [class.btn-primary]="!isPendiente()" [class.btn-secondary]="isPendiente()">
+                    <i class="bi" [class.bi-clock]="!isPendiente()" [class.bi-check-circle]="isPendiente()"></i>
+                    {{ isPendiente() ? 'En pendientes' : 'Añadir a pendientes' }}
+                </button>
+
+                <button (click)="addToVistas()" [disabled]="isVista()" class="btn" [class.btn-success]="!isVista()"
+                    [class.btn-secondary]="isVista()">
+                    <i class="bi" [class.bi-eye]="!isVista()" [class.bi-check-circle]="isVista()"></i>
+                    {{ isVista() ? 'Ya vista' : 'Marcar como vista' }}
+                </button>
+            </div>
         </div>
     </div>
 

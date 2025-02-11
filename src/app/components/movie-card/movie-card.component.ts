@@ -2,7 +2,7 @@ import { RouterModule } from '@angular/router';
 import { Component, Input } from '@angular/core';
 import { VotoColorPipe } from '../../shared/pipes/voto-color.pipe';
 import { CommonModule } from '@angular/common';
-import { GenreUtilsService } from '../../../services/genre-utils.service';
+import { GenreUtilsService } from '../../services/genre-utils.service';
 
 @Component({
   selector: 'app-movie-card',
@@ -20,5 +20,5 @@ export class MovieCardComponent {
     return this.genreUtils.getnombreGeneros(genreIds);
   }
 
- 
+
 }
